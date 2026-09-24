@@ -29,12 +29,15 @@ namespace SoporteAcademico
                         
                         Solicitud nuevaSolicitud = new Solicitud();
 
-                        // REQUERIMIENTO 2: Captura el código validando que cumpla con la longitud mínima de 8
                         nuevaSolicitud.CodigoEstudiante = ValidarCodigo("Ingrese el código del estudiante (mínimo 8 caracteres): ", 8);
-
                         nuevaSolicitud.Nombre = ValidarTextoObligatorio("Ingrese el nombre del estudiante: ");
                         
-                        Console.WriteLine($"\n[✓] Código '{nuevaSolicitud.CodigoEstudiante}' y Nombre '{nuevaSolicitud.Nombre}' guardados temporalmente.");
+                        // REQUERIMIENTO 3: Captura el tipo de consulta validando que sea una opción permitida
+                        nuevaSolicitud.TipoConsulta = ValidarTipoConsulta();
+
+                        nuevaSolicitud.Descripcion = ValidarTextoObligatorio("Ingrese una breve descripción: ");
+                        
+                        Console.WriteLine($"\n[✓] Solicitud de tipo '{nuevaSolicitud.TipoConsulta.ToUpper()}' guardada temporalmente.");
                         break;
 
                     case "2":
@@ -87,13 +90,11 @@ namespace SoporteAcademico
             return entrada;
         }
 
-        // REQUERIMIENTO 2: Función con retorno para validar la longitud mínima del código de estudiante
         static string ValidarCodigo(string mensaje, int longitudMinima)
         {
             string codigo;
             do
             {
-                // Reutiliza la función del requerimiento 6 para asegurar que no sea vacío
                 codigo = ValidarTextoObligatorio(mensaje);
                 if (codigo.Length < longitudMinima)
                 {
@@ -102,6 +103,29 @@ namespace SoporteAcademico
             } while (codigo.Length < longitudMinima);
 
             return codigo;
+        }
+
+        // REQUERIMIENTO 3: Función con retorno para validar categorías estrictas de consulta
+        static string ValidarTipoConsulta()
+        {
+            string consulta = "";
+            bool esValido = false;
+
+            while (!esValido)
+            {
+                Console.WriteLine("\nTipos de consulta permitidos: [matricula, pagos, constancia, plataforma, otro]");
+                consulta = ValidarTextoObligatorio("Ingrese el tipo de consulta: ").ToLower();
+
+                if (consulta == "matricula" || consulta == "pagos" || consulta == "constancia" || consulta == "plataforma" || consulta == "otro")
+                {
+                    esValido = true;
+                }
+                else
+                {
+                    Console.WriteLine("[Error] Categoría no válida. Debe escribir exactamente una opción de la lista.");
+                }
+            }
+            return consulta;
         }
     }
 }
