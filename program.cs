@@ -2,6 +2,7 @@ using System;
 
 namespace SoporteAcademico
 {
+    // [REQ 1]: Estructura de datos para almacenar la información de las solicitudes
     struct Solicitud
     {
         public string CodigoEstudiante;
@@ -17,12 +18,13 @@ namespace SoporteAcademico
         {
             bool continuar = true;
             
-            // REQUERIMIENTO 10: Estructura de almacenamiento para un mínimo de 3 registros
-            Solicitud[] registroSolicitudes = new Solicitud;
+            // [REQ 10]: Arreglo estructurado para almacenar un mínimo de 3 registros simultáneos
+            Solicitud[] registroSolicitudes = new Solicitud[3];
             int contadorSolicitudes = 0;
 
             while (continuar)
             {
+                // [REQ 4]: Invocación de la función del menú principal
                 MostrarMenu();
                 Console.Write("Seleccione una opción (1-3): ");
                 string opcion = Console.ReadLine();
@@ -30,20 +32,27 @@ namespace SoporteAcademico
                 switch (opcion)
                 {
                     case "1":
-                        // REQUERIMIENTO 10: Control para permitir el registro de las 3 solicitudes necesarias
+                        // [REQ 10]: Estructura de control para limitar a 3 solicitudes en ejecución
                         if (contadorSolicitudes < 3)
                         {
                             Console.WriteLine($"\n--- REGISTRO DE LA SOLICITUD {contadorSolicitudes + 1} ---");
                             
                             Solicitud nuevaSolicitud = new Solicitud();
 
+                            // [REQ 2]: Captura de código con validación de tamaño mínimo
                             nuevaSolicitud.CodigoEstudiante = ValidarCodigo("Ingrese el código del estudiante (mínimo 8 caracteres): ", 8);
+                            
+                            // [REQ 1]: Captura del nombre del estudiante con texto obligatorio
                             nuevaSolicitud.Nombre = ValidarTextoObligatorio("Ingrese el nombre del estudiante: ");
+                            
+                            // [REQ 3]: Validación del tipo de consulta permitida
                             nuevaSolicitud.TipoConsulta = ValidarTipoConsulta();
+                            
                             nuevaSolicitud.Descripcion = ValidarTextoObligatorio("Ingrese una breve descripción: ");
+                            
+                            // [REQ 5 y REQ 8]: Cálculo automático de prioridad pasando parámetros explícitos
                             nuevaSolicitud.Prioridad = CalcularPrioridad(nuevaSolicitud.TipoConsulta);
                             
-                            // Guardamos la solicitud en el índice correspondiente del arreglo
                             registroSolicitudes[contadorSolicitudes] = nuevaSolicitud;
                             contadorSolicitudes++;
 
@@ -56,7 +65,7 @@ namespace SoporteAcademico
                         break;
 
                     case "2":
-                        // REQUERIMIENTO 10: Uso de la función del resumen adaptada para iterar el arreglo
+                        // [REQ 7 y REQ 8]: Impresión de reportes pasando parámetros estructurados
                         MostrarResumenAtenciones(registroSolicitudes, contadorSolicitudes);
                         break;
 
@@ -79,6 +88,7 @@ namespace SoporteAcademico
             }
         }
 
+        // [REQ 4]: Función sin retorno dedicada exclusivamente a pintar el menú en la consola
         static void MostrarMenu()
         {
             Console.WriteLine("====================================================");
@@ -90,6 +100,8 @@ namespace SoporteAcademico
             Console.WriteLine("====================================================");
         }
 
+        // [REQ 6]: Función modular con retorno encargada de validar que un texto no sea vacío
+        // [REQ 9]: Control del alcance (scope) local de las variables internas 'mensaje' y 'entrada'
         static string ValidarTextoObligatorio(string mensaje)
         {
             string entrada;
@@ -106,6 +118,7 @@ namespace SoporteAcademico
             return entrada;
         }
 
+        // [REQ 2]: Función con retorno reutilizable para evaluar la longitud mínima del código
         static string ValidarCodigo(string mensaje, int longitudMinima)
         {
             string codigo;
@@ -121,6 +134,7 @@ namespace SoporteAcademico
             return codigo;
         }
 
+        // [REQ 3]: Función con retorno encargada de filtrar las categorías válidas de soporte
         static string ValidarTipoConsulta()
         {
             string consulta = "";
@@ -143,6 +157,8 @@ namespace SoporteAcademico
             return consulta;
         }
 
+        // [REQ 5]: Función con retorno que evalúa el tipo de consulta para asignar prioridad automática
+        // [REQ 9]: El parámetro de entrada 'tipo' restringe su contexto a este bloque lógico
         static string CalcularPrioridad(string tipo)
         {
             if (tipo == "plataforma" || tipo == "pagos")
@@ -159,7 +175,7 @@ namespace SoporteAcademico
             }
         }
 
-        // REQUERIMIENTO 10: Función modificada para recibir el arreglo entero e imprimir todas las solicitudes creadas
+        // [REQ 7]: Función encargada del diseño, ordenamiento e impresión formateada del resumen
         static void MostrarResumenAtenciones(Solicitud[] solicitudes, int cantidad)
         {
             Console.WriteLine("\n====================================================");
@@ -173,7 +189,6 @@ namespace SoporteAcademico
                 return;
             }
 
-            // Un bucle recorre el arreglo imprimiendo cada una de las consultas guardadas
             for (int i = 0; i < cantidad; i++)
             {
                 Console.WriteLine($"Registro N°: {i + 1}");
