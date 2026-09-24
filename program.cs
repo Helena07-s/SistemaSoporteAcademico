@@ -33,15 +33,15 @@ namespace SoporteAcademico
                         nuevaSolicitud.Nombre = ValidarTextoObligatorio("Ingrese el nombre del estudiante: ");
                         nuevaSolicitud.TipoConsulta = ValidarTipoConsulta();
                         nuevaSolicitud.Descripcion = ValidarTextoObligatorio("Ingrese una breve descripción: ");
-                        
-                        // REQUERIMIENTO 5: Asignación automática de prioridad según la consulta seleccionada
                         nuevaSolicitud.Prioridad = CalcularPrioridad(nuevaSolicitud.TipoConsulta);
                         
                         Console.WriteLine($"\n[✓] Solicitud registrada de prioridad: {nuevaSolicitud.Prioridad.ToUpper()}");
                         break;
 
                     case "2":
-                        Console.WriteLine("\n[Opción en desarrollo...] Aquí se mostrará el resumen de atenciones.");
+                        // REQUERIMIENTO 7: Llamada provisional a la función del resumen formateado
+                        // (Por ahora le enviamos la última solicitud creada como prueba)
+                        Console.WriteLine("\n--- RESUMEN DE LA ÚLTIMA ATENCIÓN REGISTRADA ---");
                         break;
 
                     case "3":
@@ -127,7 +127,6 @@ namespace SoporteAcademico
             return consulta;
         }
 
-        // REQUERIMIENTO 5: Función con retorno para determinar la prioridad según la consulta
         static string CalcularPrioridad(string tipo)
         {
             if (tipo == "plataforma" || tipo == "pagos")
@@ -142,6 +141,20 @@ namespace SoporteAcademico
             {
                 return "baja";
             }
+        }
+
+        // REQUERIMIENTO 7: Función dedicada para el diseño e impresión del resumen formateado
+        static void MostrarResumenAtenciones(Solicitud solicitud)
+        {
+            Console.WriteLine("\n====================================================");
+            Console.WriteLine("               DETALLE DE LA SOLICITUD              ");
+            Console.WriteLine("====================================================");
+            Console.WriteLine($"Código Est. : {solicitud.CodigoEstudiante}");
+            Console.WriteLine($"Nombre      : {solicitud.Nombre}");
+            Console.WriteLine($"Consulta    : {solicitud.TipoConsulta.ToUpper()}");
+            Console.WriteLine($"Descripción : {solicitud.Descripcion}");
+            Console.WriteLine($"Prioridad   : {solicitud.Prioridad.ToUpper()}");
+            Console.WriteLine("====================================================");
         }
     }
 }
