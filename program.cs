@@ -16,8 +16,6 @@ namespace SoporteAcademico
         static void Main(string[] args)
         {
             bool continuar = true;
-            
-            // Creamos la variable local que guardará los datos de la última solicitud
             Solicitud nuevaSolicitud = new Solicitud();
             bool hayRegistro = false;
 
@@ -36,8 +34,6 @@ namespace SoporteAcademico
                         nuevaSolicitud.Nombre = ValidarTextoObligatorio("Ingrese el nombre del estudiante: ");
                         nuevaSolicitud.TipoConsulta = ValidarTipoConsulta();
                         nuevaSolicitud.Descripcion = ValidarTextoObligatorio("Ingrese una breve descripción: ");
-                        
-                        // REQUERIMIENTO 8: Se pasa 'nuevaSolicitud.TipoConsulta' por parámetro explícito
                         nuevaSolicitud.Prioridad = CalcularPrioridad(nuevaSolicitud.TipoConsulta);
                         hayRegistro = true;
                         
@@ -47,7 +43,6 @@ namespace SoporteAcademico
                     case "2":
                         if (hayRegistro)
                         {
-                            // REQUERIMIENTO 8: Traspaso de información explícita pasando el objeto por argumento
                             MostrarResumenAtenciones(nuevaSolicitud);
                         }
                         else
@@ -86,6 +81,7 @@ namespace SoporteAcademico
             Console.WriteLine("====================================================");
         }
 
+        // REQUERIMIENTO 9: Las variables locales internas operan de forma aislada a otros contextos
         static string ValidarTextoObligatorio(string mensaje)
         {
             string entrada;
@@ -139,6 +135,7 @@ namespace SoporteAcademico
             return consulta;
         }
 
+        // REQUERIMIENTO 9: El parámetro 'tipo' restringe su alcance al bloque interno del método
         static string CalcularPrioridad(string tipo)
         {
             if (tipo == "plataforma" || tipo == "pagos")
@@ -155,9 +152,6 @@ namespace SoporteAcademico
             }
         }
 
-        static void ShowAlert(string msg) { Console.WriteLine(msg); }
-
-        // REQUERIMIENTO 8: Definición de parámetros para recibir los datos de forma aislada
         static void MostrarResumenAtenciones(Solicitud solicitud)
         {
             Console.WriteLine("\n====================================================");
