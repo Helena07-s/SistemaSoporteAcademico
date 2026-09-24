@@ -2,6 +2,16 @@ using System;
 
 namespace SoporteAcademico
 {
+    // REQUERIMIENTO 1: Estructura definida para agrupar los datos de cada solicitud
+    struct Solicitud
+    {
+        public string CodigoEstudiante;
+        public string Nombre;
+        public string TipoConsulta;
+        public string Descripcion;
+        public string Prioridad;
+    }
+
     class Program
     {
         static void Main(string[] args)
@@ -9,26 +19,48 @@ namespace SoporteAcademico
             bool continuar = true;
             while (continuar)
             {
-                // Requerimiento 4: Llamada a la función del menú principal
                 MostrarMenu();
                 Console.Write("Seleccione una opción (1-3): ");
                 string opcion = Console.ReadLine();
 
-                if (opcion == "3")
+                switch (opcion)
                 {
-                    continuar = false;
-                    Console.WriteLine("Saliendo del sistema...");
+                    case "1":
+                        Console.WriteLine("\n--- REGISTRO DE NUEVA SOLICITUD ---");
+                        
+                        // Instanciamos temporalmente una solicitud para recibir los datos
+                        Solicitud nuevaSolicitud = new Solicitud();
+
+                        // REQUERIMIENTO 1: Captura de datos básicos utilizando validación
+                        nuevaSolicitud.Nombre = ValidarTextoObligatorio("Ingrese el nombre del estudiante: ");
+                        
+                        // Los demás datos los iremos capturando de forma validada en los siguientes commits
+                        Console.WriteLine($"\n[✓] Nombre '{nuevaSolicitud.Nombre}' guardado temporalmente.");
+                        break;
+
+                    case "2":
+                        Console.WriteLine("\n[Opción en desarrollo...] Aquí se mostrará el resumen de atenciones.");
+                        break;
+
+                    case "3":
+                        continuar = false;
+                        Console.WriteLine("Saliendo del sistema...");
+                        break;
+
+                    default:
+                        Console.WriteLine("Opción no válida. Intente de nuevo.");
+                        break;
                 }
-                else
+
+                if (opcion != "3")
                 {
-                    Console.WriteLine("\n[Opción en desarrollo...] Presione una tecla para regresar al menú.");
+                    Console.WriteLine("\nPresione una tecla para continuar...");
                     Console.ReadKey();
                     Console.Clear();
                 }
             }
         }
 
-        // Requerimiento 4: Función sin retorno dedicada exclusivamente a mostrar el menú principal
         static void MostrarMenu()
         {
             Console.WriteLine("====================================================");
@@ -40,8 +72,6 @@ namespace SoporteAcademico
             Console.WriteLine("====================================================");
         }
 
-        // REQUERIMIENTO 6: Función con retorno para validar texto obligatorio (No vacío)
-        // Requerimiento 9: Las variables 'mensaje' y 'entrada' tienen alcance (scope) local aquí
         static string ValidarTextoObligatorio(string mensaje)
         {
             string entrada;
