@@ -16,6 +16,11 @@ namespace SoporteAcademico
         static void Main(string[] args)
         {
             bool continuar = true;
+            
+            // Creamos la variable local que guardará los datos de la última solicitud
+            Solicitud nuevaSolicitud = new Solicitud();
+            bool hayRegistro = false;
+
             while (continuar)
             {
                 MostrarMenu();
@@ -27,21 +32,28 @@ namespace SoporteAcademico
                     case "1":
                         Console.WriteLine("\n--- REGISTRO DE NUEVA SOLICITUD ---");
                         
-                        Solicitud nuevaSolicitud = new Solicitud();
-
                         nuevaSolicitud.CodigoEstudiante = ValidarCodigo("Ingrese el código del estudiante (mínimo 8 caracteres): ", 8);
                         nuevaSolicitud.Nombre = ValidarTextoObligatorio("Ingrese el nombre del estudiante: ");
                         nuevaSolicitud.TipoConsulta = ValidarTipoConsulta();
                         nuevaSolicitud.Descripcion = ValidarTextoObligatorio("Ingrese una breve descripción: ");
+                        
+                        // REQUERIMIENTO 8: Se pasa 'nuevaSolicitud.TipoConsulta' por parámetro explícito
                         nuevaSolicitud.Prioridad = CalcularPrioridad(nuevaSolicitud.TipoConsulta);
+                        hayRegistro = true;
                         
                         Console.WriteLine($"\n[✓] Solicitud registrada de prioridad: {nuevaSolicitud.Prioridad.ToUpper()}");
                         break;
 
                     case "2":
-                        // REQUERIMIENTO 7: Llamada provisional a la función del resumen formateado
-                        // (Por ahora le enviamos la última solicitud creada como prueba)
-                        Console.WriteLine("\n--- RESUMEN DE LA ÚLTIMA ATENCIÓN REGISTRADA ---");
+                        if (hayRegistro)
+                        {
+                            // REQUERIMIENTO 8: Traspaso de información explícita pasando el objeto por argumento
+                            MostrarResumenAtenciones(nuevaSolicitud);
+                        }
+                        else
+                        {
+                            Console.WriteLine("\n[!] No hay ninguna solicitud registrada todavía.");
+                        }
                         break;
 
                     case "3":
@@ -143,7 +155,9 @@ namespace SoporteAcademico
             }
         }
 
-        // REQUERIMIENTO 7: Función dedicada para el diseño e impresión del resumen formateado
+        static void ShowAlert(string msg) { Console.WriteLine(msg); }
+
+        // REQUERIMIENTO 8: Definición de parámetros para recibir los datos de forma aislada
         static void MostrarResumenAtenciones(Solicitud solicitud)
         {
             Console.WriteLine("\n====================================================");
