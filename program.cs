@@ -31,13 +31,13 @@ namespace SoporteAcademico
 
                         nuevaSolicitud.CodigoEstudiante = ValidarCodigo("Ingrese el código del estudiante (mínimo 8 caracteres): ", 8);
                         nuevaSolicitud.Nombre = ValidarTextoObligatorio("Ingrese el nombre del estudiante: ");
-                        
-                        // REQUERIMIENTO 3: Captura el tipo de consulta validando que sea una opción permitida
                         nuevaSolicitud.TipoConsulta = ValidarTipoConsulta();
-
                         nuevaSolicitud.Descripcion = ValidarTextoObligatorio("Ingrese una breve descripción: ");
                         
-                        Console.WriteLine($"\n[✓] Solicitud de tipo '{nuevaSolicitud.TipoConsulta.ToUpper()}' guardada temporalmente.");
+                        // REQUERIMIENTO 5: Asignación automática de prioridad según la consulta seleccionada
+                        nuevaSolicitud.Prioridad = CalcularPrioridad(nuevaSolicitud.TipoConsulta);
+                        
+                        Console.WriteLine($"\n[✓] Solicitud registrada de prioridad: {nuevaSolicitud.Prioridad.ToUpper()}");
                         break;
 
                     case "2":
@@ -105,7 +105,6 @@ namespace SoporteAcademico
             return codigo;
         }
 
-        // REQUERIMIENTO 3: Función con retorno para validar categorías estrictas de consulta
         static string ValidarTipoConsulta()
         {
             string consulta = "";
@@ -126,6 +125,23 @@ namespace SoporteAcademico
                 }
             }
             return consulta;
+        }
+
+        // REQUERIMIENTO 5: Función con retorno para determinar la prioridad según la consulta
+        static string CalcularPrioridad(string tipo)
+        {
+            if (tipo == "plataforma" || tipo == "pagos")
+            {
+                return "alta";
+            }
+            else if (tipo == "matricula")
+            {
+                return "media";
+            }
+            else
+            {
+                return "baja";
+            }
         }
     }
 }
