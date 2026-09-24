@@ -39,5 +39,23 @@ namespace SoporteAcademico
             Console.WriteLine("3. Salir");
             Console.WriteLine("====================================================");
         }
+
+        // REQUERIMIENTO 6: Función con retorno para validar texto obligatorio (No vacío)
+        // Requerimiento 9: Las variables 'mensaje' y 'entrada' tienen alcance (scope) local aquí
+        static string ValidarTextoObligatorio(string mensaje)
+        {
+            string entrada;
+            do
+            {
+                Console.Write(mensaje);
+                entrada = Console.ReadLine()?.Trim();
+                if (string.IsNullOrEmpty(entrada))
+                {
+                    Console.WriteLine("[Error] Este campo es obligatorio. No puede quedar vacío.");
+                }
+            } while (string.IsNullOrEmpty(entrada));
+
+            return entrada;
+        }
     }
 }
