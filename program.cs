@@ -16,8 +16,10 @@ namespace SoporteAcademico
         static void Main(string[] args)
         {
             bool continuar = true;
-            Solicitud nuevaSolicitud = new Solicitud();
-            bool hayRegistro = false;
+            
+            // REQUERIMIENTO 10: Estructura de almacenamiento para un mínimo de 3 registros
+            Solicitud[] registroSolicitudes = new Solicitud;
+            int contadorSolicitudes = 0;
 
             while (continuar)
             {
@@ -28,27 +30,34 @@ namespace SoporteAcademico
                 switch (opcion)
                 {
                     case "1":
-                        Console.WriteLine("\n--- REGISTRO DE NUEVA SOLICITUD ---");
-                        
-                        nuevaSolicitud.CodigoEstudiante = ValidarCodigo("Ingrese el código del estudiante (mínimo 8 caracteres): ", 8);
-                        nuevaSolicitud.Nombre = ValidarTextoObligatorio("Ingrese el nombre del estudiante: ");
-                        nuevaSolicitud.TipoConsulta = ValidarTipoConsulta();
-                        nuevaSolicitud.Descripcion = ValidarTextoObligatorio("Ingrese una breve descripción: ");
-                        nuevaSolicitud.Prioridad = CalcularPrioridad(nuevaSolicitud.TipoConsulta);
-                        hayRegistro = true;
-                        
-                        Console.WriteLine($"\n[✓] Solicitud registrada de prioridad: {nuevaSolicitud.Prioridad.ToUpper()}");
-                        break;
-
-                    case "2":
-                        if (hayRegistro)
+                        // REQUERIMIENTO 10: Control para permitir el registro de las 3 solicitudes necesarias
+                        if (contadorSolicitudes < 3)
                         {
-                            MostrarResumenAtenciones(nuevaSolicitud);
+                            Console.WriteLine($"\n--- REGISTRO DE LA SOLICITUD {contadorSolicitudes + 1} ---");
+                            
+                            Solicitud nuevaSolicitud = new Solicitud();
+
+                            nuevaSolicitud.CodigoEstudiante = ValidarCodigo("Ingrese el código del estudiante (mínimo 8 caracteres): ", 8);
+                            nuevaSolicitud.Nombre = ValidarTextoObligatorio("Ingrese el nombre del estudiante: ");
+                            nuevaSolicitud.TipoConsulta = ValidarTipoConsulta();
+                            nuevaSolicitud.Descripcion = ValidarTextoObligatorio("Ingrese una breve descripción: ");
+                            nuevaSolicitud.Prioridad = CalcularPrioridad(nuevaSolicitud.TipoConsulta);
+                            
+                            // Guardamos la solicitud en el índice correspondiente del arreglo
+                            registroSolicitudes[contadorSolicitudes] = nuevaSolicitud;
+                            contadorSolicitudes++;
+
+                            Console.WriteLine($"\n[✓] Solicitud {contadorSolicitudes} registrada con éxito.");
                         }
                         else
                         {
-                            Console.WriteLine("\n[!] No hay ninguna solicitud registrada todavía.");
+                            Console.WriteLine("\n[!] Ya se ha alcanzado el límite máximo de 3 solicitudes.");
                         }
+                        break;
+
+                    case "2":
+                        // REQUERIMIENTO 10: Uso de la función del resumen adaptada para iterar el arreglo
+                        MostrarResumenAtenciones(registroSolicitudes, contadorSolicitudes);
                         break;
 
                     case "3":
@@ -75,13 +84,12 @@ namespace SoporteAcademico
             Console.WriteLine("====================================================");
             Console.WriteLine("   SISTEMA DE ORIENTACIÓN Y SOPORTE ACADÉMICO       ");
             Console.WriteLine("====================================================");
-            Console.WriteLine("1. Registrar nueva solicitud");
+            Console.WriteLine("1. Registrar nueva solicitud (Mínimo 3)");
             Console.WriteLine("2. Mostrar resumen de atenciones");
             Console.WriteLine("3. Salir");
             Console.WriteLine("====================================================");
         }
 
-        // REQUERIMIENTO 9: Las variables locales internas operan de forma aislada a otros contextos
         static string ValidarTextoObligatorio(string mensaje)
         {
             string entrada;
@@ -135,7 +143,6 @@ namespace SoporteAcademico
             return consulta;
         }
 
-        // REQUERIMIENTO 9: El parámetro 'tipo' restringe su alcance al bloque interno del método
         static string CalcularPrioridad(string tipo)
         {
             if (tipo == "plataforma" || tipo == "pagos")
@@ -152,17 +159,31 @@ namespace SoporteAcademico
             }
         }
 
-        static void MostrarResumenAtenciones(Solicitud solicitud)
+        // REQUERIMIENTO 10: Función modificada para recibir el arreglo entero e imprimir todas las solicitudes creadas
+        static void MostrarResumenAtenciones(Solicitud[] solicitudes, int cantidad)
         {
             Console.WriteLine("\n====================================================");
-            Console.WriteLine("               DETALLE DE LA SOLICITUD              ");
+            Console.WriteLine("               RESUMEN DE ATENCIONES                ");
             Console.WriteLine("====================================================");
-            Console.WriteLine($"Código Est. : {solicitud.CodigoEstudiante}");
-            Console.WriteLine($"Nombre      : {solicitud.Nombre}");
-            Console.WriteLine($"Consulta    : {solicitud.TipoConsulta.ToUpper()}");
-            Console.WriteLine($"Descripción : {solicitud.Descripcion}");
-            Console.WriteLine($"Prioridad   : {solicitud.Prioridad.ToUpper()}");
-            Console.WriteLine("====================================================");
+            
+            if (cantidad == 0)
+            {
+                Console.WriteLine("No se han encontrado solicitudes registradas.");
+                Console.WriteLine("====================================================");
+                return;
+            }
+
+            // Un bucle recorre el arreglo imprimiendo cada una de las consultas guardadas
+            for (int i = 0; i < cantidad; i++)
+            {
+                Console.WriteLine($"Registro N°: {i + 1}");
+                Console.WriteLine($"Código Est. : {solicitudes[i].CodigoEstudiante}");
+                Console.WriteLine($"Nombre      : {solicitudes[i].Nombre}");
+                Console.WriteLine($"Consulta    : {solicitudes[i].TipoConsulta.ToUpper()}");
+                Console.WriteLine($"Descripción : {solicitudes[i].Descripcion}");
+                Console.WriteLine($"Prioridad   : {solicitudes[i].Prioridad.ToUpper()}");
+                Console.WriteLine("----------------------------------------------------");
+            }
         }
     }
 }
