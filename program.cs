@@ -2,7 +2,6 @@ using System;
 
 namespace SoporteAcademico
 {
-    // REQUERIMIENTO 1: Estructura definida para agrupar los datos de cada solicitud
     struct Solicitud
     {
         public string CodigoEstudiante;
@@ -28,14 +27,14 @@ namespace SoporteAcademico
                     case "1":
                         Console.WriteLine("\n--- REGISTRO DE NUEVA SOLICITUD ---");
                         
-                        // Instanciamos temporalmente una solicitud para recibir los datos
                         Solicitud nuevaSolicitud = new Solicitud();
 
-                        // REQUERIMIENTO 1: Captura de datos básicos utilizando validación
+                        // REQUERIMIENTO 2: Captura el código validando que cumpla con la longitud mínima de 8
+                        nuevaSolicitud.CodigoEstudiante = ValidarCodigo("Ingrese el código del estudiante (mínimo 8 caracteres): ", 8);
+
                         nuevaSolicitud.Nombre = ValidarTextoObligatorio("Ingrese el nombre del estudiante: ");
                         
-                        // Los demás datos los iremos capturando de forma validada en los siguientes commits
-                        Console.WriteLine($"\n[✓] Nombre '{nuevaSolicitud.Nombre}' guardado temporalmente.");
+                        Console.WriteLine($"\n[✓] Código '{nuevaSolicitud.CodigoEstudiante}' y Nombre '{nuevaSolicitud.Nombre}' guardados temporalmente.");
                         break;
 
                     case "2":
@@ -86,6 +85,23 @@ namespace SoporteAcademico
             } while (string.IsNullOrEmpty(entrada));
 
             return entrada;
+        }
+
+        // REQUERIMIENTO 2: Función con retorno para validar la longitud mínima del código de estudiante
+        static string ValidarCodigo(string mensaje, int longitudMinima)
+        {
+            string codigo;
+            do
+            {
+                // Reutiliza la función del requerimiento 6 para asegurar que no sea vacío
+                codigo = ValidarTextoObligatorio(mensaje);
+                if (codigo.Length < longitudMinima)
+                {
+                    Console.WriteLine($"[Error] El código debe tener al menos {longitudMinima} caracteres.");
+                }
+            } while (codigo.Length < longitudMinima);
+
+            return codigo;
         }
     }
 }
